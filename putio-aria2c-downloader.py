@@ -19,7 +19,7 @@ WATCH_LIST = dict(config.items('watch_folders'))
 LOG_FILE = config['default']['log_file']
 RPC_URL = config['aria2c']['rpc_url']
 
-logging.basicConfig(format='%(asctime)s - [%(levelname)s]: %(message)s', filename=LOG_FILE, level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - [%(levelname)s]: %(message)s', filename=LOG_FILE, level=logging.DEBUG)
 
 def download_all_in_watchlist(root_watch_dir=0, download_dir=ROOT_DOWNLOAD_DIR):
     logging.info('Searching for files to download from put.io')
@@ -83,7 +83,8 @@ def add_uri(uri, directory=ROOT_DOWNLOAD_DIR):
     loop = True
     while loop:
         time.sleep(2)
-        status = proxy.aria2.tellStatus(token, gid, ["gid","status"])
+        status = proxy.aria2.tellStatus(token, gid, ["gid","status","errorCode","errorMessage"])
+        logging.debug(status)
         if status['status'] == 'complete':
             loop = False
             return True

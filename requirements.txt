@@ -1,0 +1,2 @@
+putio.py==8.2.1
+configparser==3.5.0
