@@ -1,17 +1,8 @@
-[default]
-log_file = /var/opt/put.io/putio.log
-
-[put.io]
-oauth_token = XXXXXXXX 
-keep_folder_structure = true
-
-[aria2c]
-root_download_dir = /download/incomplete
-secret_token = XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-post_proccess_dir = /download/complete
-rpc_url = https://example.com:6800/rpc
-
-[watch_folders]
-watch_folder1 = isos
-watch_folder2 = news
-watch_folder3 = videos
+oauth_token = 'XXXXXXXX'
+keep_folder_structure = 'true'
+root_watch_dir = 0
+root_download_dir = '/download/incomplete'
+aria2c_secret_token = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+post_process_dir = '/download/complete'
+rpc_url = 'https://example.com:6800/rpc'
+watch_folders = ['isos', 'news', 'videos']

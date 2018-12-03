@@ -1,28 +1,50 @@
 # put.io-aria2c-downloader
-Python script that sends put.io files to aria2c for download
+Python script that sends put.io download links to aria2c for download
 
 
 ## Install
-This setup assumes you have aria2c running with rpc running. Also assumes ssl enabled
+This setup assumes you have aria2c up with rpc running
 ```bash
-mkdir /opt/put.io
-cd /opt/put.io
-git clone https://github.com/cvockrodt/put.io-aria2c-downloader.git
+pip install putio-downloader
+```
+
+## Usage
+```
+Usage: putio-download [OPTIONS]
+
+  CLI entrypoint for put.io downloader
+
+Options:
+  --oauth-token TEXT          [required]
+  --keep-folder-structure
+  --root-watch-dir INTEGER    [required]
+  --aria2c-secret-token TEXT  [required]
+  --root-download-dir TEXT    [required]
+  --post-process-dir TEXT     [required]
+  --watch-folders TEXT        [required]
+  --rpc-url TEXT              [required]
+  --version
+  -q, --quiet
+  -v, --verbose
+  --config FILE               Read configuration from PATH.
+  --help                      Show this message and exit.
 ```
 
 ### Configuration
-Copy the example configuration file where you want it
-```bash 
-mkdir /var/opt/put.io 
-cp /opt/put.io/config.ini.example /var/opt/put.io/config.ini
+If you don't want to pass those options on the command line, you can work with a config file to pass all or just some of the following:
 ```
-Edit the configuration with watch folders, put.io token and aria2c secret token, aria2c rpc url, etc.
-```bash
-vi /var/opt/put.io/config.ini
-``` 
-
+oauth_token = 'XXXXXXXX'
+keep_folder_structure = 'true'
+root_watch_dir = 0
+root_download_dir = '/download/incomplete'
+aria2c_secret_token = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+post_process_dir = '/download/complete'
+rpc_url = 'https://example.com:6800/rpc'
+watch_folders = ['isos', 'news', 'videos']
+```
 
 ### crontab
+Run the download script on an interval so you don't miss out on any of your files
 ```crontab
-*/5 * * * * /bin/bash /opt/put.io/is_putio_downloader_running >> /var/opt/put.io/putio.log 2>&1
+*/10 * * * * /bin/bash putio_download --config ~/myconfig.ini >> ~/putio.log 2>&1
 ```
