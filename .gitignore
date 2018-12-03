@@ -4,3 +4,5 @@
 putio_downloader.egg-info
 **/__pycache__
 coverage.xml
+build
+dist
