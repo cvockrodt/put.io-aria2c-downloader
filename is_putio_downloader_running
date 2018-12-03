@@ -1,8 +1,0 @@
-#!/bin/bash
-cd /opt/put.io;
-COUNT=`ps -ef | grep putio-aria2c-downloader.py | grep -v grep | wc -l`
-if [ $COUNT == 0 ]; then
-	python ./putio-aria2c-downloader.py
-else
-	echo "already running..."
-fi
