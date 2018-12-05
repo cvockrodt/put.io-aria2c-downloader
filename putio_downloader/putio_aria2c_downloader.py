@@ -134,7 +134,7 @@ class PutioAria2cDownloader():
         click.echo('Cleaning up...')
         files = client.File.list(folder.id)
         if not files:
-            if folder.name not in self.watch_list.values():
+            if folder.name not in self.watch_list:
                 folder.delete(True)
                 click.echo('Deleted {} from put.io'.format(folder.name))
 
