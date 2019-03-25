@@ -6,3 +6,4 @@ aria2c_secret_token = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 post_process_dir = '/download/complete'
 rpc_url = 'https://example.com:6800/rpc'
 watch_folders = ['isos', 'news', 'videos']
+clear_results = 'false'

@@ -3,6 +3,7 @@
 import binascii
 import logging
 import os
+import tempfile
 import time
 import xmlrpc.client
 
@@ -18,56 +19,50 @@ class PutioAria2cDownloader():
         """Putio Aria2c Downloader
 
         Attributes:
-            oauth_token (str): put.io oauth token
             keep_folder_structure (bool): Whether or not to keep the same folder structure as
                 on put.io
-            root_watch_dir (str): ID of root folder on put.io to check for watched folders
             aria2c_secret_token (str): aria2c rpc secret token
             root_download_dir (int): Which folder id (on put.io) to start recursing from
             post_process_dir (str): Where to move completed downloads
             watch_list (dict): folder names to watch inside root_download_dir on put.io
-            rpc_url (str): URL for aria2c RPC interface
+            putio_client: putiopy library client object
+            aria_client: aria2c xmlrpc client object
         """
         self.logger = logging.getLogger('putio.' + __name__)
-        if kwargs.get('oauth_token', None):
-            self.oauth_token = kwargs.get('oauth_token')
-        if kwargs.get('keep_folder_structure', None):
-            self.keep_folder_structure = kwargs.get('keep_folder_structure')
-        if kwargs.get('root_watch_dir', None):
-            self.root_watch_dir = kwargs.get('root_watch_dir')
-        if kwargs.get('aria2c_secret_token', None):
-            self.aria2c_secret_token = kwargs.get('aria2c_secret_token')
-        if kwargs.get('root_download_dir', None):
-            self.root_download_dir = kwargs.get('root_download_dir')
-        if kwargs.get('post_process_dir', None):
-            self.post_process_dir = kwargs.get('post_process_dir')
-        if kwargs.get('watch_folders', None):
-            self.watch_list = kwargs.get('watch_folders')
-        if kwargs.get('rpc_url', None):
-            self.rpc_url = kwargs.get('rpc_url')
 
-    def download_all_in_watchlist(self, root_watch_dir: int = 0):
+        self.keep_folder_structure = kwargs.get('keep_folder_structure', True)
+        self.aria2c_secret_token = 'token:%s' % kwargs.get('aria2c_secret_token', None)
+        self.root_download_dir = kwargs.get('root_download_dir', tempfile.mkdtemp())
+        self.post_process_dir = kwargs.get('post_process_dir', os.getcwd())
+        self.watch_list = kwargs.get('watch_folders', [])
+
+        self.putio_client = putiopy.Client(kwargs.get('oauth_token', None))
+        self.aria_client = xmlrpc.client.ServerProxy(kwargs.get('rpc_url', None))
+
+    def download_all_in_watchlist(self, root_watch_dir: int = 0, clear_results: bool = False):
         """Searches for files to download in all watched folders
 
         Args:
             root_watch_dir: put.io directory id to start looking for watched folders
+            clear_results: should we clean up after ourselves and remove all download results
+                from aria2c?
         """
         click.echo('Searching for files to download from put.io')
-        client = putiopy.Client(self.oauth_token)
-        files = client.File.list(parent_id=root_watch_dir)
+        files = self.putio_client.File.list(parent_id=root_watch_dir)
         for _file in files:
             if (_file.content_type == 'application/x-directory'
                     and _file.name in self.watch_list):
                 self.download_all_in_folder(
-                    client, _file, path=_file.name, download_dir=self.root_download_dir
+                    _file, path=_file.name, download_dir=self.root_download_dir
                 )
             else:
                 click.echo('Folder {} not in watchlist'.format(_file.name))
-        client.close()
+        self.putio_client.close()
+        if clear_results:
+            self.aria_client.aria2.purgeDownloadResult(self.aria2c_secret_token)
 
     def download_all_in_folder(
             self,
-            client: putiopy.Client,
             folder,
             path: str = '',
             download_dir: str = None
@@ -75,7 +70,6 @@ class PutioAria2cDownloader():
         """Download all in folder
 
         Args:
-            client: put.io client object
             folder (putiopy.File): folder on put.io to download from
             path: path to the folder
             download_dir: path to place downloads
@@ -83,7 +77,7 @@ class PutioAria2cDownloader():
         click.echo('Downloading everything in {}'.format(folder.name))
         if not self.keep_folder_structure:
             download_dir = self.root_download_dir
-        files = client.File.list(folder.id)
+        files = self.putio_client.File.list(folder.id)
         for _file in files:
             if _file.content_type == 'application/x-directory':
                 folderpath = '/'.join([path, _file.name])
@@ -101,9 +95,9 @@ class PutioAria2cDownloader():
                             ''.join([self.post_process_dir, folderpath])
                         )
                     )
-                self.download_all_in_folder(client, _file, folderpath, download_dir=download_dir)
+                self.download_all_in_folder(_file, folderpath, download_dir=download_dir)
                 click.echo('Files from {} sent to aria2c'.format(folderpath))
-                self.cleanup_empty_folders(client, _file)
+                self.cleanup_empty_folders(_file)
             else:
                 download_link = _file.get_download_link()
                 if not download_dir:
@@ -124,15 +118,14 @@ class PutioAria2cDownloader():
         if not files:
             click.echo('No files to download in {}'.format(folder.name))
 
-    def cleanup_empty_folders(self, client: putiopy.Client, folder):
+    def cleanup_empty_folders(self, folder):
         """Cleanup empty folders
 
         Args:
-            client: putio client library client object
             folder (putiopy.File): folder to cleanup
         """
         click.echo('Cleaning up...')
-        files = client.File.list(folder.id)
+        files = self.putio_client.File.list(folder.id)
         if not files:
             if folder.name not in self.watch_list:
                 folder.delete(True)
@@ -148,11 +141,11 @@ class PutioAria2cDownloader():
         Returns:
             status: whether URI was added and completed successfully
         """
-        token = 'token:' + self.aria2c_secret_token
+
         if not self.keep_folder_structure:
             directory = self.root_download_dir
         click.echo('Adding URI {} to {}'.format(uri, directory))
-        proxy = xmlrpc.client.ServerProxy(self.rpc_url)
+
         opts = {
             'dir': directory,
             'file-allocation': 'falloc',
@@ -160,12 +153,12 @@ class PutioAria2cDownloader():
             'max-connection-per-server': '4',
             'check-integrity': 'true'
         }
-        gid = proxy.aria2.addUri(token, [uri], opts)
+        gid = self.aria_client.aria2.addUri(self.aria2c_secret_token, [uri], opts)
         loop = True
         while loop:
             time.sleep(2)
-            status = proxy.aria2.tellStatus(
-                token, gid, ['gid', 'status', 'errorCode', 'errorMessage']
+            status = self.aria_client.aria2.tellStatus(
+                self.aria2c_secret_token, gid, ['gid', 'status', 'errorCode', 'errorMessage']
             )
             self.logger.debug(status)
             if status['status'] == 'complete':

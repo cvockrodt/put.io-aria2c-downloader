@@ -44,6 +44,7 @@ def print_version(
 @click.option('--post-process-dir', default=os.getcwd(), prompt=True, required=True)
 @click.option('--watch-folders', prompt=True, required=True)
 @click.option('--rpc-url', default='http://localhost:6800/rpc', prompt=True, required=True)
+@click.option('--clear-results', default=False)
 @click.option('--version', is_flag=True, callback=print_version)
 @click.option('--quiet', '-q', default=False, is_flag=True)
 @click.option('--verbose', '-v', default=False, is_flag=True)
@@ -60,7 +61,9 @@ def main(**kwargs):
 
     try:
         downloader = PutioAria2cDownloader(**kwargs)
-        downloader.download_all_in_watchlist()
+        downloader.download_all_in_watchlist(
+            root_watch_dir=kwargs.get('root_watch_dir', 0),
+            clear_results=kwargs.get('clear_results', False))
     except putiopy.ClientError:
         raise click.ClickException('There was a problem connecting to put.io')
     except xmlrpc.client.ProtocolError:
