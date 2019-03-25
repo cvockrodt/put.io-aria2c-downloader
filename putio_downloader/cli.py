@@ -2,6 +2,7 @@
 """
 import logging
 import os
+import tempfile
 import xmlrpc
 from typing import Union
 
@@ -39,7 +40,7 @@ def print_version(
 @click.option('--keep-folder-structure', default=True, is_flag=True, prompt=True)
 @click.option('--root-watch-dir', default=0, prompt=True, required=True)
 @click.option('--aria2c-secret-token', prompt=True, hide_input=True, required=True)
-@click.option('--root-download-dir', default='/tmp', prompt=True, required=True)
+@click.option('--root-download-dir', default=tempfile.mkdtemp(), prompt=True, required=True)
 @click.option('--post-process-dir', default=os.getcwd(), prompt=True, required=True)
 @click.option('--watch-folders', prompt=True, required=True)
 @click.option('--rpc-url', default='http://localhost:6800/rpc', prompt=True, required=True)
