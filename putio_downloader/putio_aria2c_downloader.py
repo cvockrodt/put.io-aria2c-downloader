@@ -6,6 +6,7 @@ import os
 import tempfile
 import time
 import xmlrpc.client
+import shutil
 
 import click
 import putiopy
@@ -110,7 +111,7 @@ class PutioAria2cDownloader():
                     _file.delete(True)
                     download_path = '/'.join([download_dir, path, _file.name])
                     destination_path = '/'.join([self.post_process_dir, path, _file.name])
-                    os.rename(download_path, destination_path)
+                    shutil.move(download_path, destination_path)
                 else:
                     click.echo(
                         'File {} didn\'t download successfully with aria'.format(_file.name)
