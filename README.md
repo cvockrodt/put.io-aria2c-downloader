@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/cvockrodt/put.io-aria2c-downloader.svg?branch=master)](https://travis-ci.org/cvockrodt/put.io-aria2c-downloader)
+
 # put.io-aria2c-downloader
 Python script that sends put.io download links to aria2c for download
 
