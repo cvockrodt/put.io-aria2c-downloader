@@ -3,10 +3,10 @@
 import binascii
 import logging
 import os
+import shutil
 import tempfile
 import time
 import xmlrpc.client
-import shutil
 
 import click
 import putiopy
