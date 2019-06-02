@@ -46,5 +46,5 @@ watch_folders = ['isos', 'news', 'videos']
 ### crontab
 Run the download script on an interval so you don't miss out on any of your files
 ```crontab
-*/10 * * * * putio_download --config ~/myconfig.ini >> ~/putio.log 2>&1
+*/10 * * * * putio-download --config ~/myconfig.ini >> ~/putio.log 2>&1
 ```
