@@ -81,19 +81,19 @@ class PutioAria2cDownloader():
         files = self.putio_client.File.list(folder.id)
         for _file in files:
             if _file.content_type == 'application/x-directory':
-                folderpath = '/'.join([path, _file.name])
+                folderpath = os.path.join([path, _file.name])
                 try:
                     click.echo(folderpath)
                     click.echo(
                         'Making directory {}{}'.format(self.post_process_dir, folderpath)
                     )
-                    os.makedirs(''.join([self.post_process_dir, folderpath]))
+                    os.makedirs(os.path.join([self.post_process_dir, folderpath]))
                 except FileNotFoundError:
                     raise click.ClickException('Couldn\'t create directory')
                 except FileExistsError:
                     click.echo(
                         'Folder {} already exists'.format(
-                            ''.join([self.post_process_dir, folderpath])
+                            os.path.join([self.post_process_dir, folderpath])
                         )
                     )
                 self.download_all_in_folder(_file, folderpath, download_dir=download_dir)
@@ -104,13 +104,13 @@ class PutioAria2cDownloader():
                 if not download_dir:
                     download_dir = ''
                 completed = self.add_uri(
-                    download_link, directory='/'.join([download_dir, path])
+                    download_link, directory=os.path.join([download_dir, path])
                 )
                 if completed:
                     click.echo('File {} downloaded successfully by aria'.format(_file.name))
                     _file.delete(True)
-                    download_path = '/'.join([download_dir, path, _file.name])
-                    destination_path = '/'.join([self.post_process_dir, path, _file.name])
+                    download_path = os.path.join([download_dir, path, _file.name])
+                    destination_path = os.path.join([self.post_process_dir, path, _file.name])
                     shutil.move(download_path, destination_path)
                 else:
                     click.echo(
