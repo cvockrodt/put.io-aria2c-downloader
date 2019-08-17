@@ -109,7 +109,7 @@ class PutioAria2cDownloader():
                 if completed:
                     click.echo('File {} downloaded successfully by aria'.format(_file.name))
                     _file.delete(True)
-                    download_path = '/'.join([download_dir, path, _file.name])
+                    download_path = '/'.join([download_dir, _file.name])
                     destination_path = '/'.join([self.post_process_dir, path, _file.name])
                     shutil.move(download_path, destination_path)
                 else:
