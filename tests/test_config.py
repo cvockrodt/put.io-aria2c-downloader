@@ -1,5 +1,4 @@
-"""Test Config file
-"""
+"""Test Config file."""
 import os
 import xmlrpc.client
 

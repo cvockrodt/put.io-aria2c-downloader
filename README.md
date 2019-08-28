@@ -45,8 +45,27 @@ rpc_url = 'https://example.com:6800/rpc'
 watch_folders = ['isos', 'news', 'videos']
 ```
 
+For windows, directories must follow windows' directory formatting, ie.
+```
+root_download_dir = 'C:\\download\\incomplete'
+post_process_dir = 'C:\\download\\complete'
+```
+
 ### crontab
 Run the download script on an interval so you don't miss out on any of your files
 ```crontab
 */10 * * * * putio-download --config ~/myconfig.ini >> ~/putio.log 2>&1
 ```
+
+To prevent multiple instances of putio-download from running, consider using a wrapper script like the following:
+```bash
+#!/bin/bash
+COUNT=`ps -ef | grep putio-download | grep -v grep | wc -l`
+if [ $COUNT == 0 ]; then
+    putio-download --config ~/config.ini
+else
+	echo "already running..."
+fi
+```
+
+*If you do use a script like this, make sure to update the crontab to point to it*
