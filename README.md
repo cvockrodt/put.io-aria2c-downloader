@@ -45,6 +45,12 @@ rpc_url = 'https://example.com:6800/rpc'
 watch_folders = ['isos', 'news', 'videos']
 ```
 
+For windows, directories must follow windows' directory formatting, ie.
+```
+root_download_dir = 'C:\\download\\incomplete'
+post_process_dir = 'C:\\download\\complete'
+```
+
 ### crontab
 Run the download script on an interval so you don't miss out on any of your files
 ```crontab
