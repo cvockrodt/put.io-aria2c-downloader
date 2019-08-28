@@ -1,5 +1,4 @@
-"""Test CRC calculation
-"""
+"""Test CRC calculation."""
 from putio_downloader import PutioAria2cDownloader
 
 

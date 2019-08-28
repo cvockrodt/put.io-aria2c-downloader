@@ -1,5 +1,4 @@
-"""Main CLI entrypoint for put.io downloader
-"""
+"""Main CLI entrypoint for put.io downloader."""
 import logging
 import os
 import tempfile
@@ -20,12 +19,13 @@ def print_version(
         param: Union[click.core.Option, click.core.Parameter],
         value: Union[bool, int, str]
 ):
-    """Print version callback method
+    """Print version callback method.
 
     Args:
         ctx: click context
         param: click param
         value: click value
+
     """
     if param == 'test':
         return
@@ -50,8 +50,7 @@ def print_version(
 @click.option('--verbose', '-v', default=False, is_flag=True)
 @click_config_file.configuration_option()
 def main(**kwargs):
-    """CLI entrypoint for put.io downloader
-    """
+    """CLI entrypoint for put.io downloader."""
     if kwargs.get('quiet'):
         LOGGER.setLevel(logging.ERROR)
     elif kwargs.get('verbose'):
