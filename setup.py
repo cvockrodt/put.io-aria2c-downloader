@@ -7,7 +7,7 @@ from setuptools import find_packages, setup
 
 def _read_long_description():
     try:
-        with open('readme.md') as fd:
+        with open('README.md') as fd:
             return fd.read()
     except Exception:
         return None
@@ -31,6 +31,7 @@ setup(
     author_email='casey.vockrodt@gmail.com',
     description='Download all files from your put.io account recursively with aria2c',
     long_description=_read_long_description(),
+    long_description_content_type="text/markdown",
     packages=find_packages(exclude='tests'),
     license='MIT',
     install_requires=requirements,
