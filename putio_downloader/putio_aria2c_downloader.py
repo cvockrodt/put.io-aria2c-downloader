@@ -36,7 +36,11 @@ class PutioAria2cDownloader():
         self.complete_dir = kwargs.get('complete_dir', os.getcwd())
         self.watch_list = kwargs.get('watch_folders', [])
 
-        self.putio_client = putiopy.Client(kwargs.get('oauth_token'))
+        self.putio_client = putiopy.Client(
+            kwargs.get('oauth_token'),
+            use_retry=True,
+            timeout=10
+        )
         self.aria_client = xmlrpc.client.ServerProxy(kwargs.get('rpc_url'))
 
     def download_all_in_watchlist(
