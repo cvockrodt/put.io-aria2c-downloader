@@ -16,7 +16,7 @@ with open('requirements.txt', 'r') as fv:
 
 setup(
     name='putio-downloader',
-    version='2.2.0',
+    version='3.0.0',
     url='https://github.com/cvockrodt/put.io-aria2c-downloader',
     author='Casey Vockrodt',
     author_email='casey.vockrodt@gmail.com',
