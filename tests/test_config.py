@@ -20,8 +20,8 @@ def test_config():
     test_instance = PutioAria2cDownloader(**kwargs)
     assert test_instance.keep_folder_structure
     assert test_instance.aria2c_secret_token == 'token:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-    assert test_instance.root_download_dir.startswith('/tmp/')
-    assert test_instance.post_process_dir == os.getcwd()
+    assert test_instance.incomplete_dir.startswith('/tmp/')
+    assert test_instance.complete_dir == os.getcwd()
     assert test_instance.watch_list == ['isos', 'news', 'videos']
     assert not hasattr(test_instance, 'root_watch_dir')
     assert not hasattr(test_instance, 'rpc_url')

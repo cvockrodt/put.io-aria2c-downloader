@@ -42,6 +42,8 @@ def print_version(
 @click.option('--aria2c-secret-token', prompt=True, hide_input=True, required=True)
 @click.option('--root-download-dir', default=tempfile.mkdtemp(), prompt=True, required=True)
 @click.option('--post-process-dir', default=os.getcwd(), prompt=True, required=True)
+@click.option('--incomplete-dir', default=tempfile.mkdtemp(), prompt=True, required=True)
+@click.option('--complete-dir', default=os.getcwd(), prompt=True, required=True)
 @click.option('--watch-folders', prompt=True, required=True)
 @click.option('--rpc-url', default='http://localhost:6800/rpc', prompt=True, required=True)
 @click.option('--clear-results', default=False)

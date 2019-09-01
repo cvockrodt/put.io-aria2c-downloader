@@ -21,8 +21,8 @@ Options:
   --keep-folder-structure
   --root-watch-dir INTEGER    [required]
   --aria2c-secret-token TEXT  [required]
-  --root-download-dir TEXT    [required]
-  --post-process-dir TEXT     [required]
+  --incomplete-dir TEXT       [required]
+  --complete-dir TEXT         [required]
   --watch-folders TEXT        [required]
   --rpc-url TEXT              [required]
   --version
@@ -38,17 +38,17 @@ If you don't want to pass those options on the command line, you can work with a
 oauth_token = 'XXXXXXXX'
 keep_folder_structure = 'true'
 root_watch_dir = 0
-root_download_dir = '/download/incomplete'
+incomplete_dir = '/download/incomplete'
 aria2c_secret_token = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-post_process_dir = '/download/complete'
+complete_dir = '/download/complete'
 rpc_url = 'https://example.com:6800/rpc'
 watch_folders = ['isos', 'news', 'videos']
 ```
 
 For windows, directories must follow windows' directory formatting, ie.
 ```
-root_download_dir = 'C:\\download\\incomplete'
-post_process_dir = 'C:\\download\\complete'
+incomplete_dir = 'C:\\download\\incomplete'
+complete_dir = 'C:\\download\\complete'
 ```
 
 ### crontab
