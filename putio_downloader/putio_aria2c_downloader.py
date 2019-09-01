@@ -121,6 +121,10 @@ class PutioAria2cDownloader():
             destination_path = os.path.join(
                 self.complete_dir, path, _file.name)
             shutil.move(download_path, destination_path)
+            try:
+                os.rmdir(directory)
+            except FileNotFoundError:
+                click.echo(f'Tried to rm {directory} but it wasn\'t empty')
         else:
             click.echo(f'aria2c didn\'t download {_file.name} successfully')
 
