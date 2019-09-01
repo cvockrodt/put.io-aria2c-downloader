@@ -40,8 +40,6 @@ def print_version(
 @click.option('--keep-folder-structure', default=True, is_flag=True, prompt=True)
 @click.option('--root-watch-dir', default=0, prompt=True, required=True)
 @click.option('--aria2c-secret-token', prompt=True, hide_input=True, required=True)
-@click.option('--root-download-dir', default=tempfile.mkdtemp(), prompt=True, required=True)
-@click.option('--post-process-dir', default=os.getcwd(), prompt=True, required=True)
 @click.option('--incomplete-dir', default=tempfile.mkdtemp(), prompt=True, required=True)
 @click.option('--complete-dir', default=os.getcwd(), prompt=True, required=True)
 @click.option('--watch-folders', prompt=True, required=True)
