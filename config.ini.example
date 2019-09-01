@@ -1,9 +1,9 @@
 oauth_token = 'XXXXXXXX'
 keep_folder_structure = 'true'
 root_watch_dir = 0
-root_download_dir = '/download/incomplete'
+incomplete_dir = '/download/incomplete'
 aria2c_secret_token = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-post_process_dir = '/download/complete'
+complete_dir = '/download/complete'
 rpc_url = 'https://example.com:6800/rpc'
 watch_folders = ['isos', 'news', 'videos']
 clear_results = 'false'

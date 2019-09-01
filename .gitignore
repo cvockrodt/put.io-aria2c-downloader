@@ -6,3 +6,4 @@ putio_downloader.egg-info
 coverage.xml
 build
 dist
+.vscode
